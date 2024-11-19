@@ -14,7 +14,7 @@ const Profile = ({
         <span className='blue_gradient'>{name} Profile</span>
         <p className='desc_text'>{desc}</p>
       </h1>
-      <div className='mt-10 prompt_layout'>
+      <div className='my-10 prompt_layout'>
         {data?.map((prompt) => (
           <PromptCard
             key={prompt._id}
