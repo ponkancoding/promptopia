@@ -12,6 +12,10 @@ const PromptCard = ({
   handleDelete
 }) => {
 
+  const { data: session } = useSession()
+  const pathName = usePathname()
+  const router = useRouter()
+
   const [copied, setCopied] = useState('')
 
   const handleCopy = () => {
@@ -34,8 +38,7 @@ const PromptCard = ({
             className="rounded-full object-contain"
           />
           <div className="flex flex-col">
-            <h3 className="font-satoshi font-semibold text-gray-900">{prompt.creator.username}</h3>
-            {/* <p className="font-inter text-sm text-gray-500">{prompt.creator.email}</p> */}
+            <h3 className="font-satoshi font-semibold text-lg text-gray-900">{prompt.creator.username}</h3>
           </div>
         </div>
         <div className="copy_btn" onClick={handleCopy}>
@@ -48,12 +51,20 @@ const PromptCard = ({
         </div>
       </div>
 
-      <p className="my-4 font-satoshi text-sm text-gray-700">{prompt.prompt}</p>
+      <p className="my-4 font-inter text-sm text-gray-700">{prompt.prompt}</p>
       <p
         className="font-inter text-sm blue_gradient cursor-pointer"
         onClick={handleTagClick && handleTagClick(prompt.tag)}>
           {prompt.tag}
       </p>
+      {
+        session.user.id === prompt.creator._id && pathName === '/profile' && (
+          <div className="flex-start gap-2 mt-4">
+            <p className="font-inter text-sm green_gradient cursor-pointer" onClick={() => handleEdit(prompt)}>Edit</p>
+            <p className="font-inter text-sm orange_gradient cursor-pointer" onClick={handleDelete}>Delete</p>
+          </div>
+        )
+      }
     </div>
   )
 }
