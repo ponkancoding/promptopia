@@ -1,9 +1,12 @@
 'use client'
 
 import { useState } from "react"
-import Image from 'next/image'
 import { useSession } from 'next-auth/react'
 import { usePathname, useRouter } from "next/navigation"
+
+import Image from 'next/image'
+import Link from "next/link"
+
 
 const PromptCard = ({
   prompt,
@@ -14,9 +17,8 @@ const PromptCard = ({
 
   const { data: session } = useSession()
   const pathName = usePathname()
-  const router = useRouter()
 
-  const [copied, setCopied] = useState('')
+  const [copied, setCopied] = useState(false)
 
   const handleCopy = () => {
     navigator.clipboard.writeText(prompt.prompt)
@@ -29,7 +31,7 @@ const PromptCard = ({
   return (
     <div className="prompt_card">
       <div className="flex justify-between items-center gap-5">
-        <div className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
+        <Link href={`/profile/${prompt.creator._id}`} className="flex-1 flex justify-start items-center gap-3 cursor-pointer">
           <Image
             src={prompt.creator.image}
             alt="profile_image"
@@ -40,7 +42,7 @@ const PromptCard = ({
           <div className="flex flex-col">
             <h3 className="font-satoshi font-semibold text-lg text-gray-900">{prompt.creator.username}</h3>
           </div>
-        </div>
+        </Link>
         <div className="copy_btn" onClick={handleCopy}>
           <Image
             src={copied ? 'assets/icons/tick.svg' : 'assets/icons/copy.svg'}
@@ -58,7 +60,7 @@ const PromptCard = ({
           {prompt.tag}
       </p>
       {
-        session.user.id === prompt.creator._id && pathName === '/profile' && (
+        session?.user?.id === prompt.creator._id && pathName === '/profile' && (
           <div className="flex-start gap-2 mt-4">
             <p className="font-inter text-sm green_gradient cursor-pointer" onClick={() => handleEdit(prompt)}>Edit</p>
             <p className="font-inter text-sm orange_gradient cursor-pointer" onClick={handleDelete}>Delete</p>

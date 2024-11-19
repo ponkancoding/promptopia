@@ -15,7 +15,7 @@ const Profile = ({
         <p className='desc_text'>{desc}</p>
       </h1>
       <div className='mt-10 prompt_layout'>
-        {data.map((prompt) => (
+        {data?.map((prompt) => (
           <PromptCard
             key={prompt._id}
             prompt={prompt}
