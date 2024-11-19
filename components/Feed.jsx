@@ -17,11 +17,24 @@ const PromptCardList = ({ data, handleTagClick }) => {
 
 const Feed = () => {
 
-  const [searchText, setSearchText] = useState('')
   const [prompts, setPrompts] = useState([])
+  const [filteredPrompts, setFilteredPrompts] = useState([])
 
   const handleSearchChange = (e) => {
-    setSearchText(e.target.value)
+    const searchText = e.target.value.toLowerCase()
+
+    // Filter the prompts based on the search text
+    const filteredPrompts = prompts.filter((prompt) => {
+      return prompt?.tag?.toLowerCase().includes(searchText) ||  prompt?.prompt?.toLowerCase().includes(searchText) || prompt?.creator?.username.toLowerCase().includes(searchText)
+    })
+
+    if (filteredPrompts.length === 0) {
+      // If no prompts are found, show all the prompts
+      setFilteredPrompts(prompts)
+      return
+    } else {
+      setFilteredPrompts(filteredPrompts)
+    }
   }
 
   useEffect(() => {
@@ -30,7 +43,6 @@ const Feed = () => {
       try {
         const response = await fetch(`/api/prompt`)
         const data = await response.json()
-        console.log("🚀 ~ fetchPrompts ~ data:", data)
         setPrompts(data)
       } catch (error) {
         console.error(error)
@@ -39,7 +51,7 @@ const Feed = () => {
 
     fetchPrompts()
   }
-  , [searchText])
+  , [])
 
   return (
     <section className='feed'>
@@ -54,7 +66,7 @@ const Feed = () => {
       </form>
 
       <PromptCardList
-        data={prompts}
+        data={filteredPrompts}
         handleTagClick={() => {}}
       />
     </section>
