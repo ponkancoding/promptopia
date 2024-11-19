@@ -9,7 +9,7 @@ const PromptCardList = ({ data, handleTagClick }) => {
       <PromptCard
         key={prompt._id}
         prompt={prompt}
-        handleTagClick={handleTagClick}
+        handleTagClick={(value) => handleTagClick(value)}
       />
     ))}
   </div>
@@ -19,11 +19,13 @@ const Feed = () => {
 
   const [prompts, setPrompts] = useState([])
   const [filteredPrompts, setFilteredPrompts] = useState([])
+  const [searchText, setSearchText] = useState('')
 
-  const handleSearchChange = (e) => {
-    const searchText = e.target.value.toLowerCase()
+  const handleTagClick = (value) => {
+    setSearchText(value.toLowerCase())
+  }
 
-    // Filter the prompts based on the search text
+  const searchPrompts = (searchText) => {
     const filteredPrompts = prompts.filter((prompt) => {
       return prompt?.tag?.toLowerCase().includes(searchText) ||  prompt?.prompt?.toLowerCase().includes(searchText) || prompt?.creator?.username.toLowerCase().includes(searchText)
     })
@@ -37,6 +39,7 @@ const Feed = () => {
     }
   }
 
+
   useEffect(() => {
     // Fetch data from the server
     const fetchPrompts = async () => {
@@ -44,14 +47,18 @@ const Feed = () => {
         const response = await fetch(`/api/prompt`)
         const data = await response.json()
         setPrompts(data)
+        setFilteredPrompts(data)
       } catch (error) {
         console.error(error)
       }
     }
 
     fetchPrompts()
-  }
-  , [])
+  }, [])
+
+  useEffect(() => {
+    searchPrompts(searchText)
+  }, [searchText])
 
   return (
     <section className='feed'>
@@ -60,14 +67,14 @@ const Feed = () => {
           type='text'
           placeholder='Search for tag or a username'
           value={searchText}
-          onChange={handleSearchChange}
+          onChange={(e) => setSearchText(e.target.value.toLowerCase())}
           className='search_input peer'
         />
       </form>
 
       <PromptCardList
         data={filteredPrompts}
-        handleTagClick={() => {}}
+        handleTagClick={handleTagClick}
       />
     </section>
   )
