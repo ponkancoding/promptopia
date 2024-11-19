@@ -9,11 +9,11 @@ const Profile = ({
   handleDelete
 }) => {
   return (
-    <section className='w-full'>
+    <section className='w-full px-4'>
       <h1 className='head_text text-left'>
-        <span className='blue_gradient'>{name} Profile</span>
-        <p className='desc_text'>{desc}</p>
+        <span className='blue_gradient'>{name}'s Profile</span>
       </h1>
+      <p className='desc'>{desc}</p>
       <div className='my-10 prompt_layout'>
         {data?.map((prompt) => (
           <PromptCard
