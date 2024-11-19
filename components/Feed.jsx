@@ -26,7 +26,7 @@ const Feed = () => {
   }
 
   const searchPrompts = (searchText) => {
-    const filteredPrompts = prompts.filter((prompt) => {
+    const filteredPrompts = prompts?.filter((prompt) => {
       return prompt?.tag?.toLowerCase().includes(searchText) ||  prompt?.prompt?.toLowerCase().includes(searchText) || prompt?.creator?.username.toLowerCase().includes(searchText)
     })
 
