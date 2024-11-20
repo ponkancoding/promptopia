@@ -5,7 +5,7 @@ import PromptCard from '@components/PromptCard'
 
 const PromptCardList = ({ data, handleTagClick }) => {
   return <div className="my-16 prompt_layout">
-    {data.map((prompt) => (
+    {data?.map((prompt) => (
       <PromptCard
         key={prompt._id}
         prompt={prompt}
